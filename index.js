@@ -31,9 +31,32 @@ async function run() {
 
     app.post('/toys', async(req, res)=>{
       const body = req.body;
+      console.log(body);
       const result = await toyCollection.insertOne(body)
       res.send(result)
     })
+
+    app.get('/toys', async(req,res)=>{
+    
+      const result = await toyCollection.find({}).toArray()
+      res.send(result)
+    })
+    app.get('/toys/:email', async(req,res)=>{
+      console.log(req.params.email);
+    })
+
+    app.get('/toys/:text', async(req,res)=>{
+          console.log(req.params.text);
+          if(req.params.text == "Math" || req.params.text == "Language" || req.params.text == "Science"){
+            const result = await toyCollection.find({category: req.params.text}).toArray()
+           return res.send(result)
+          }
+          const result = await toyCollection.find({}).toArray()
+          res.send(result)
+
+      }
+      
+    )
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
