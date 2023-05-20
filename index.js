@@ -43,10 +43,12 @@ async function run() {
     })
     app.get('/toys/:email', async(req,res)=>{
       console.log(req.params.email);
+      const result = await toyCollection.find({sellerEmail:req.params.email}).toArray()
+      res.send(result)
     })
 
-    app.get('/toys/:text', async(req,res)=>{
-          console.log(req.params.text);
+    app.get('/toystext/:text', async(req,res)=>{
+        
           if(req.params.text == "Math" || req.params.text == "Language" || req.params.text == "Science"){
             const result = await toyCollection.find({category: req.params.text}).toArray()
            return res.send(result)
