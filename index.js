@@ -47,6 +47,13 @@ async function run() {
       const result = await toyCollection.find({}).toArray()
       res.send(result)
     })
+    app.delete('/toys/:id', async(req,res)=>{
+    
+     const id = req.params.id;
+     const query = {_id: new ObjectId(id)}
+     const result = await toyCollection.deleteOne(query)
+     res.send(result)
+    })
     app.get('/toys/:email', async(req,res)=>{
       console.log(req.params.email);
       const result = await toyCollection.find({sellerEmail:req.params.email}).toArray()
@@ -58,6 +65,7 @@ async function run() {
       const result = await toyCollection.findOne(query)
       res.send(result)
     })
+
     app.put('/updateToy/:id',async(req,res)=>{
       const id = req.params.id;
       const filter = {_id: new ObjectId(id)};
