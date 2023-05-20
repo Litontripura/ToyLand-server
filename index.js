@@ -54,6 +54,35 @@ async function run() {
      const result = await toyCollection.deleteOne(query)
      res.send(result)
     })
+
+    app.get('/toys/:id', async(req,res)=>{
+    
+     const id = req.params.id;
+     const query = {_id: new ObjectId(id)}
+     const result = await toyCollection.findOne(query)
+     res.send(result)
+    })
+
+
+    app.put('/toys/:id', async(req,res)=>{
+    
+     const id = req.params.id;
+     const filter = {_id: new ObjectId(id)}
+     const options = {upsert: true}
+     const updateToy = req.body
+     console.log(updateToy);
+    const toy = {
+      $set:{
+        availablequantity: updateToy.availablequantity,
+         price:updateToy.price,
+         description:updateToy.description
+      }
+    }
+    const result = await toyCollection.updateOne(filter,toy, options)
+    res.send(result)
+    })
+
+
     app.get('/toys/:email', async(req,res)=>{
       console.log(req.params.email);
       const result = await toyCollection.find({sellerEmail:req.params.email}).toArray()
@@ -66,21 +95,6 @@ async function run() {
       res.send(result)
     })
 
-    app.put('/updateToy/:id',async(req,res)=>{
-      const id = req.params.id;
-      const filter = {_id: new ObjectId(id)};
-      const options = {upsert: true};
-      const updateToys = req.body;
-      const toy = {
-        $set: {
-          price:updateToys.price,
-          availablequantity:updateToys.availablequantity,
-          description:updateToys.description,
-        }
-      }
-      const result = await toyCollection.updateOne(filter,toy, options)
-      res.send(result)
-    })
 
 
     app.get('/toystext/:text', async(req,res)=>{
